@@ -24,12 +24,6 @@ client.publish = (...args) => {
   return client.publishWithCorrelationIds(CorrelationIds, ...args);
 };
 
-client._publishBatch = client.publishBatch;
-
-client.publishBatch = (...args) => {
-  return client.publishBatchWithCorrelationIds(CorrelationIds, ...args);
-};
-
 client.publishWithCorrelationIds = (correlationIds, params, ...args) => {
   const newMessageAttributes = addCorrelationIds(
     correlationIds,
@@ -41,6 +35,12 @@ client.publishWithCorrelationIds = (correlationIds, params, ...args) => {
   };
 
   return client._publish(extendedParams, ...args);
+};
+
+client._publishBatch = client.publishBatch;
+
+client.publishBatch = (...args) => {
+  return client.publishBatchWithCorrelationIds(CorrelationIds, ...args);
 };
 
 client.publishBatchWithCorrelationIds = (correlationIds, params, ...args) => {

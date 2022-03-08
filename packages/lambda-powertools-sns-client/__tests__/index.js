@@ -14,10 +14,14 @@ beforeEach(() => {
   mockPublish.mockReturnValueOnce({
     promise: async () => Promise.resolve(),
   });
+  mockPublishBatch.mockReturnValueOnce({
+    promise: async () => Promise.resolve(),
+  });
 });
 
 afterEach(() => {
   mockPublish.mockClear();
+  mockPublishBatch.mockClear();
   CorrelationIds.clearAll();
 });
 
@@ -122,13 +126,13 @@ describe("SNS client", () => {
         };
         await SNS.publishBatch(params).promise();
 
-        expect(mockPublishBatch).toBeCalledWith({
-          TopicArn: "topic-arn",
-          PublishBatchRequestEntries: [{
+        expect(mockPublishBatch).toBeCalledWith(
+          [{
             Message: "test",
-            Id: "1"
-          }],
-        });
+            Id: "1",
+            MessageAttributes: {}
+          }]
+        );
       });
     });
 
@@ -149,8 +153,7 @@ describe("SNS client", () => {
         };
         await SNS.publishBatch(params).promise();
 
-        expect(mockPublishBatch).toBeCalledWith({
-          PublishBatchRequestEntries: [{
+        expect(mockPublishBatch).toBeCalledWith([{
             Message: "test",
             Id: "1",
             MessageAttributes: {
@@ -167,9 +170,7 @@ describe("SNS client", () => {
                 StringValue: "1",
               },
             },
-          }],
-          TopicArn: "topic-arn",
-        });
+          }]);
       });
     });
   });
