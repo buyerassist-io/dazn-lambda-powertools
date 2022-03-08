@@ -126,13 +126,14 @@ describe("SNS client", () => {
         };
         await SNS.publishBatch(params).promise();
 
-        expect(mockPublishBatch).toBeCalledWith(
-          [{
+        expect(mockPublishBatch).toBeCalledWith({
+          PublishBatchRequestEntries:  [{
             Message: "test",
             Id: "1",
             MessageAttributes: {}
-          }]
-        );
+          }],
+          TopicArn: "topic-arn",
+        });
       });
     });
 
@@ -153,24 +154,15 @@ describe("SNS client", () => {
         };
         await SNS.publishBatch(params).promise();
 
-        expect(mockPublishBatch).toBeCalledWith([{
-            Message: "test",
-            Id: "1",
-            MessageAttributes: {
-              "x-correlation-id": {
-                DataType: "String",
-                StringValue: "id",
-              },
-              "debug-log-enabled": {
-                DataType: "String",
-                StringValue: "true",
-              },
-              "call-chain-length": {
-                DataType: "String",
-                StringValue: "1",
-              },
-            },
-          }]);
+        expect(mockPublishBatch).toBeCalledWith({
+          PublishBatchRequestEntries: 
+            [{
+              Id: "1", 
+              Message: "test",
+              MessageAttributes: {"call-chain-length": {"DataType": "String", "StringValue": "1"}, "debug-log-enabled": {"DataType": "String", "StringValue": "true"}, "x-correlation-id": {"DataType": "String", "StringValue": "id"}}
+            }], 
+          TopicArn: "topic-arn"
+        });
       });
     });
   });

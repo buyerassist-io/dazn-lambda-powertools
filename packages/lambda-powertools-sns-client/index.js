@@ -44,7 +44,7 @@ client.publishBatch = (...args) => {
 };
 
 client.publishBatchWithCorrelationIds = (correlationIds, params, ...args) => {
-  const extendedParams = params.PublishBatchRequestEntries.map(entry => {
+  const extendedBatchEntries = params.PublishBatchRequestEntries.map(entry => {
     const newMessageAttributes = addCorrelationIds(
       correlationIds,
       entry.MessageAttributes
@@ -54,6 +54,10 @@ client.publishBatchWithCorrelationIds = (correlationIds, params, ...args) => {
       MessageAttributes: newMessageAttributes
     }
   });
+  const extendedParams = {
+    ...params,
+    PublishBatchRequestEntries: extendedBatchEntries
+  }
   return client._publishBatch(extendedParams, ...args);
 };
 
