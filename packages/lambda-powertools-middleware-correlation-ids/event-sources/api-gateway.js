@@ -31,16 +31,22 @@ function captureCorrelationIds(
     }
   }
 
-  if (!correlationIds[consts.X_CORRELATION_ID]) {
-    correlationIds[consts.X_CORRELATION_ID] =
-      apiGatewayRequestId || awsRequestId;
-  }
-  ba.updateBARelatedCorrelationIds(correlationIds);
-
   // forward the original User-Agent on
   if (headers[consts.USER_AGENT]) {
     correlationIds[consts.USER_AGENT] = headers[consts.USER_AGENT];
   }
+
+  if (!correlationIds[consts.X_CORRELATION_ID]) {
+    let externalSource = "";
+    if(correlationIds[consts.USER_AGENT] && correlationIds[consts.USER_AGENT].match(/Zapier/)) {
+      externalSource = "zap-";
+    }
+    correlationIds[consts.X_CORRELATION_ID] =
+      `${externalSource}${apiGatewayRequestId || awsRequestId}`;
+  }
+
+
+  ba.updateBARelatedCorrelationIds(correlationIds);
 
   if (headers[consts.DEBUG_LOG_ENABLED]) {
     correlationIds[consts.DEBUG_LOG_ENABLED] =

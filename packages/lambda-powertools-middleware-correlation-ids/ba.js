@@ -3,8 +3,8 @@ const uuid = require("uuid");
 const updateBARelatedCorrelationIds = (correlationIds) => {
   // BuyerAssist Logic to generate SpanIds/TraceIds
   let externalSource = ""
-  if (correlationIds[consts.USER_AGENT] && correlationIds[consts.USER_AGENT].match(/zap/i)) {
-    externalSource = "zap"
+  if (correlationIds[consts.USER_AGENT] && correlationIds[consts.USER_AGENT].match(/Zapier/)) {
+    externalSource = "zap-"
   }
   const spanId = generateSpanId(externalSource);
   if (!correlationIds[consts.X_CORRELATION_TRACE_ID]) {
@@ -17,10 +17,10 @@ const updateBARelatedCorrelationIds = (correlationIds) => {
   correlationIds[consts.X_CORRELATION_SPAN_ID] = spanId;
 };
 const generateTraceId = (externalSource) => {
-  return `${externalSource}-${uuid.v1()}`;
+  return `${externalSource}${uuid.v1()}`;
 };
 const generateSpanId = (externalSource) => {
-  return `${externalSource}-${uuid.v1()}-${process.env.SRV_DISPLAY_NAME}`;
+  return `${externalSource}${uuid.v1()}-${process.env.SRV_DISPLAY_NAME}`;
 };
 module.exports = {
   updateBARelatedCorrelationIds,
