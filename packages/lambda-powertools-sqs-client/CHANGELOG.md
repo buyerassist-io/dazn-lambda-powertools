@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.29.9 (2022-06-22)
+
+**Note:** Version bump only for package @buyerassist/dazn-lambda-powertools-sqs-client
+
+
+
+
+
 ## 1.29.8 (2022-06-17)
 
 **Note:** Version bump only for package @buyerassist/dazn-lambda-powertools-sqs-client
